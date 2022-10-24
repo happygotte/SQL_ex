@@ -39,3 +39,29 @@ select extract(month from cal.m) as month,
 cal.m + interval '1 month') - cal.m as length
 from (select generate_series('2012-01-01'::timestamp,'2012-12-31', '1 month') as m) cal
 order by month;
+
+
+
+
+--For any given timestamp, work out the number of days remaining in the month. 
+--The current day should count as a whole day, regardless of the time. 
+--Use '2012-02-11 01:00:00' as an example timestamp for 
+--the purposes of making the answer. Format the output as a single interval value.
+
+select age('2012-03-01', '2012-02-11') as remaining;
+
+select (date_trunc('month',ts.testts) + interval '1 month') 
+		- date_trunc('day', ts.testts) as remaining
+	from (select timestamp '2012-02-11 01:00:00' as testts) ts   
+
+
+-- Return a list of the start and end time of the last 10 bookings 
+--(ordered by the time at which they end, followed by the time 
+--at which they start) in the system.
+
+select starttime, starttime + (slots * interval '30 minute') as endtime
+from cd.bookings as b
+order by 2 desc, 1 desc
+limit 10;
+
+
